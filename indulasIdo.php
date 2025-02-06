@@ -100,10 +100,6 @@ try {
             background-color: #fcfcfc;
         }
 
-        .routeNameCon{
-            background-color: #fcfcfc;
-        }
-
         .route-card {
             background: #fcfcfc;
             width: 950px;
@@ -130,14 +126,16 @@ try {
 
         .routeCon{
             background: #fbfbfb;
-            width: 97.5%;
+            width: 90%;
             margin-bottom: 5px;
             padding: 20px;
+            margin: 0 auto;
+            border-radius: 10px;
         }
 
         .route-number {
             background: #b30000;
-            display: flex;
+            display: inline;
             width: 3%;
             height: 60%;
             font-size: 2.5rem;
@@ -145,7 +143,7 @@ try {
             border-radius: 5px;
             padding: 5px 20px;
             color: var(--text-light);
-            margin-left: 20%;
+            margin-left: 18%;
             margin-bottom: 25px;
         }
 
@@ -154,8 +152,8 @@ try {
             color: #636363;
             font-size: 1.5rem;
             font-weight: bold;
-            margin-left: 20%;
-            margin-right: 30%;
+            margin-left: 10%;
+            margin-right: 16%;
             background: #e8e8e8;
             padding: 5px 10px;
             border-radius: 5px;
@@ -270,14 +268,21 @@ try {
 
             .route-number{
                 margin-left: 0;
-                padding-right: 60px;
+                padding-right: 25px;
+                margin-right: 75%;
             }
 
             .route-name{
                 margin-left: 0;
+                font-size: 1rem;
+                margin-right: 65%;
             }
 
-            .routeCon{
+            .routeCon,{
+                width: 365px;
+            }
+
+            .route, .routeNumCon{
                 width: 365px;
             }
 
@@ -318,15 +323,25 @@ try {
 
             .route-number{
                 margin-left: 0;
-                padding-right: 60px;
+                padding-right: 30px;
+                margin-right: 55%;
             }
 
             .route-name{
                 font-size: 1.25rem;
                 margin-left: 0;
+                margin-right: 35%;
+            }
+
+            .routeNumCon{
+                height: 200px;
             }
 
             .routeCon{
+                width: 335px;
+            }
+
+            .route{
                 width: 335px;
             }
 
@@ -353,14 +368,15 @@ try {
 <body>
 
 <!-- -----------------------------------------------------------------------------------------------------HTML - HEADER------------------------------------------------------------------------------------------------ -->
-    <div class="header">
+        <div class="header">
             <button class="backBtn" id=backBtn><i class="fa-solid fa-chevron-left"></i></button>
             <h1><i class="fas fa-bus"></i> Kaposvár Helyi Járatok</h1> 
             <input type="date" id="datePicker" require />
         </div>
 
+        <div id="route">
         <div id="routeNumCon" class="routeCon"></div>
-        <div id="routeNameCon" class="routeCon"></div>
+        </div>
 <!-- -----------------------------------------------------------------------------------------------------HEADER END--------------------------------------------------------------------------------------------------- -->
 
 <!-- -----------------------------------------------------------------------------------------------------HTML - BODY CONTENT------------------------------------------------------------------------------------------ -->
@@ -515,7 +531,7 @@ try {
                     <img src="switch.png" alt="Switch" style="width: 20px; height: 25px;">
                 </button>
             `;
-            routeNameCon.appendChild(routeNumCon);
+            route.appendChild(routeNumCon);
 
             // Filter schedule based on the selected direction
             let foundRoutes = false; // Track if any valid routes exist
