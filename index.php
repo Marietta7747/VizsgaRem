@@ -50,31 +50,31 @@ if (!isset($_SESSION['user_id'])) {
         }
 
 /*--------------------------------------------------------------------------------------------------------CSS - HEADER---------------------------------------------------------------------------------------------------*/
-    .header {
-        position: relative;
-        background: var(--primary-color);
-        color: var(--text-light);
-        padding: 1rem;
-    }
+        .header {
+            position: relative;
+            background: var(--primary-color);
+            color: var(--text-light);
+            padding: 1rem;
+        }
 
-    .header h1 {
-        text-align: center;
-        font-size: 2rem;
-        padding: 1rem 0;
-        margin-left: 38%;
-        display: inline-block;
-    }
+        .header h1 {
+            text-align: center;
+            font-size: 2rem;
+            padding: 1rem 0;
+            margin-left: 38%;
+            display: inline-block;
+        }
 
-    .nav-wrapper {
-        position: absolute;
-        top: 1rem;
-        left: 1rem;
-        z-index: 1000;
-    }
+        .nav-wrapper {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            z-index: 1000;
+        }
 
-    .nav-container {
-        position: relative;
-    }
+        .nav-container {
+            position: relative;
+        }
 /*--------------------------------------------------------------------------------------------------------HEADER END-----------------------------------------------------------------------------------------------------*/
 
         /* Custom map and UI enhancements */
@@ -137,16 +137,16 @@ if (!isset($_SESSION['user_id'])) {
 <body>
 
 <!-- -----------------------------------------------------------------------------------------------------HTML - HEADER----------------------------------------------------------------------------------------------- -->
-<div class="header">
-    <div class="nav-wrapper">
-        <div class="nav-container">
-            <button class="menu-btn" id="menuBtn">
-                <div class="hamburger">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </button>
+    <div class="header">
+        <div class="nav-wrapper">
+            <div class="nav-container">
+                <button class="menu-btn" id="menuBtn">
+                    <div class="hamburger">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </button>
             <nav class="dropdown-menu" id="dropdownMenu">
                 <ul class="menu-items">
                     <li>
@@ -755,189 +755,190 @@ if (!isset($_SESSION['user_id'])) {
 
             console.error('Útvonaltervezési hiba:', status);
         }
+        
         // Helyi járatok megjelenítése
-let currentPolyline = null;
-let currentMarkers = [];
-// Globális változóként kell létrehozni
-let routesData = {};
+        let currentPolyline = null;
+        let currentMarkers = [];
+        // Globális változóként kell létrehozni
+        let routesData = {};
 
-async function loadRouteData() {
-    try {
-        const response = await fetch('http://localhost:3000/api/helyibusz');
-        if (!response.ok) {
-            throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        
-        const data = await response.json();
-        
-        routesData = data.reduce((acc, stop) => {
-            if (!acc[stop.option]) {
-                acc[stop.option] = [];
+        async function loadRouteData() {
+            try {
+                const response = await fetch('http://localhost:3000/api/helyibusz');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                routesData = data.reduce((acc, stop) => {
+                    if (!acc[stop.option]) {
+                        acc[stop.option] = [];
+                    }
+                    acc[stop.option].push({
+                        name: stop.name,
+                        lat: parseFloat(stop.lat),
+                        lng: parseFloat(stop.lng)
+                    });
+                    return acc;
+                }, {});
+                
+                // Részletesebb naplózás a hibakereséshez
+                console.log('Betöltött útvonalak:', Object.keys(routesData));
+                console.log('Útvonal adatok betöltve:', Object.keys(routesData).length, 'útvonal');
+            } catch (error) {
+                console.error('Hiba az útvonal adatok betöltésekor:', error);
             }
-            acc[stop.option].push({
-                name: stop.name,
-                lat: parseFloat(stop.lat),
-                lng: parseFloat(stop.lng)
-            });
-            return acc;
-        }, {});
-        
-        // Részletesebb naplózás a hibakereséshez
-        console.log('Betöltött útvonalak:', Object.keys(routesData));
-        console.log('Útvonal adatok betöltve:', Object.keys(routesData).length, 'útvonal');
-    } catch (error) {
-        console.error('Hiba az útvonal adatok betöltésekor:', error);
-    }
-}
+        }
 
-// Adatok betöltése oldal betöltéskor
-loadRouteData();
+        // Adatok betöltése oldal betöltéskor
+        loadRouteData();
 
-function displayLocalRoute(routeId) {
-    clearCurrentRoute();
-    
-    // Konvertáljuk a routeId-t a megfelelő formátumra
-    let formattedRouteId;
-    if (routeId.includes('vissza')) {
-        // Ha "vissza" szerepel benne, akkor átalakítjuk "stopXXBack" formára
-        formattedRouteId = 'stop' + routeId.replace(' vissza', 'Back');
-    } else {
-        // Egyébként egyszerűen hozzáadjuk a "stop" előtagot
-        formattedRouteId = 'stop' + routeId;
-    }
+        function displayLocalRoute(routeId) {
+            clearCurrentRoute();
+            
+            // Konvertáljuk a routeId-t a megfelelő formátumra
+            let formattedRouteId;
+            if (routeId.includes('vissza')) {
+                // Ha "vissza" szerepel benne, akkor átalakítjuk "stopXXBack" formára
+                formattedRouteId = 'stop' + routeId.replace(' vissza', 'Back');
+            } else {
+                // Egyébként egyszerűen hozzáadjuk a "stop" előtagot
+                formattedRouteId = 'stop' + routeId;
+            }
 
-    const routeStops = routesData[formattedRouteId];
-    
-    if (!routeStops || routeStops.length === 0) {
-        console.error('Nem található útvonal:', routeId);
-        return;
-    }
+            const routeStops = routesData[formattedRouteId];
+            
+            if (!routeStops || routeStops.length === 0) {
+                console.error('Nem található útvonal:', routeId);
+                return;
+            }
 
-    const routeCoordinates = routeStops.map(stop => ({
-        lat: stop.lat,
-        lng: stop.lng
-    }));
-
-    currentPolyline = new google.maps.Polyline({
-        path: routeCoordinates,
-        geodesic: true,
-        strokeColor: '#FF0000',
-        strokeOpacity: 1.0,
-        strokeWeight: 3,
-        map: map
-    });
-
-    routeStops.forEach((stop, index) => {
-        const marker = new google.maps.Marker({
-            position: { 
+            const routeCoordinates = routeStops.map(stop => ({
                 lat: stop.lat,
                 lng: stop.lng
-            },
-            map: map,
-            title: stop.name,
-            icon: {
-                path: google.maps.SymbolPath.CIRCLE,
-                scale: 10,
-                fillColor: '#1E88E5',
-                fillOpacity: 1,
-                strokeWeight: 2,
-                strokeColor: '#FFFFFF'
-            },
-            label: {
-                text: (index + 1).toString(),
-                color: '#FFFFFF',
-                fontSize: '11px'
-            }
-        });
+            }));
 
-        const infoContent = `
-            <div style="padding: 15px; max-width: 300px;">
-                <h3 style="margin: 0 0 10px 0; color: #1E88E5; border-bottom: 2px solid #1E88E5; padding-bottom: 5px;">
-                    ${stop.name}
-                </h3>
-                <div style="margin: 5px 0;">
-                    <strong>Koordináták:</strong><br>
-                    Szélesség: ${stop.lat.toFixed(6)}<br>
-                    Hosszúság: ${stop.lng.toFixed(6)}
-                </div>
-                <div style="margin: 10px 0;">
-                    <strong>Megálló sorszáma:</strong> ${index + 1} / ${routeStops.length}
-                </div>
-                <div style="margin: 5px 0;">
-                    <strong>Útvonal:</strong> ${routeId}
-                </div>
-                <div style="font-size: 12px; color: #666; margin-top: 10px;">
-                    Kattintson a térképre a bezáráshoz
-                </div>
-            </div>
-        `;
+            currentPolyline = new google.maps.Polyline({
+                path: routeCoordinates,
+                geodesic: true,
+                strokeColor: '#FF0000',
+                strokeOpacity: 1.0,
+                strokeWeight: 3,
+                map: map
+            });
 
-        const infoWindow = new google.maps.InfoWindow({
-            content: infoContent,
-            maxWidth: 350
-        });
+            routeStops.forEach((stop, index) => {
+                const marker = new google.maps.Marker({
+                    position: { 
+                        lat: stop.lat,
+                        lng: stop.lng
+                    },
+                    map: map,
+                    title: stop.name,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 10,
+                        fillColor: '#1E88E5',
+                        fillOpacity: 1,
+                        strokeWeight: 2,
+                        strokeColor: '#FFFFFF'
+                    },
+                    label: {
+                        text: (index + 1).toString(),
+                        color: '#FFFFFF',
+                        fontSize: '11px'
+                    }
+                });
 
-        marker.addListener('click', () => {
-            currentMarkers.forEach(m => m.infoWindow?.close());
-            infoWindow.open(map, marker);
-        });
+                const infoContent = `
+                    <div style="padding: 15px; max-width: 300px;">
+                        <h3 style="margin: 0 0 10px 0; color: #1E88E5; border-bottom: 2px solid #1E88E5; padding-bottom: 5px;">
+                            ${stop.name}
+                        </h3>
+                        <div style="margin: 5px 0;">
+                            <strong>Koordináták:</strong><br>
+                            Szélesség: ${stop.lat.toFixed(6)}<br>
+                            Hosszúság: ${stop.lng.toFixed(6)}
+                        </div>
+                        <div style="margin: 10px 0;">
+                            <strong>Megálló sorszáma:</strong> ${index + 1} / ${routeStops.length}
+                        </div>
+                        <div style="margin: 5px 0;">
+                            <strong>Útvonal:</strong> ${routeId}
+                        </div>
+                        <div style="font-size: 12px; color: #666; margin-top: 10px;">
+                            Kattintson a térképre a bezáráshoz
+                        </div>
+                    </div>
+                `;
 
-        marker.infoWindow = infoWindow;
-        currentMarkers.push(marker);
-    });
+                const infoWindow = new google.maps.InfoWindow({
+                    content: infoContent,
+                    maxWidth: 350
+                });
 
-    const bounds = new google.maps.LatLngBounds();
-    routeCoordinates.forEach(coord => bounds.extend(coord));
-    map.fitBounds(bounds);
-}
+                marker.addListener('click', () => {
+                    currentMarkers.forEach(m => m.infoWindow?.close());
+                    infoWindow.open(map, marker);
+                });
 
-// Aktuális útvonal törlése
-function clearCurrentRoute() {
-    if (currentPolyline) {
-        currentPolyline.setMap(null);
-        currentPolyline = null;
-    }
-    currentMarkers.forEach(marker => {
-        if (marker.infoWindow) {
-            marker.infoWindow.close();
+                marker.infoWindow = infoWindow;
+                currentMarkers.push(marker);
+            });
+
+            const bounds = new google.maps.LatLngBounds();
+            routeCoordinates.forEach(coord => bounds.extend(coord));
+            map.fitBounds(bounds);
         }
-        marker.setMap(null);
-    });
-    currentMarkers = [];
-    
-    if (window.directionsRenderer) {
-        window.directionsRenderer.setMap(null);
-    }
-}
 
-// Eseménykezelők hozzáadása
-document.addEventListener('DOMContentLoaded', async () => {
-    await loadRouteData();
-    
-    const complexRouteSelect = document.getElementById('complex-route');
-    if (complexRouteSelect) {
-        complexRouteSelect.addEventListener('change', (event) => {
-            const selectedRoute = event.target.value;
-            if (selectedRoute) {
-                displayLocalRoute(selectedRoute);
+        // Aktuális útvonal törlése
+        function clearCurrentRoute() {
+            if (currentPolyline) {
+                currentPolyline.setMap(null);
+                currentPolyline = null;
             }
-        });
-    }
+            currentMarkers.forEach(marker => {
+                if (marker.infoWindow) {
+                    marker.infoWindow.close();
+                }
+                marker.setMap(null);
+            });
+            currentMarkers = [];
+            
+            if (window.directionsRenderer) {
+                window.directionsRenderer.setMap(null);
+            }
+        }
 
-    const findRouteButton = document.getElementById('find-route');
-    if (findRouteButton) {
-        findRouteButton.addEventListener('click', () => {
-            clearCurrentRoute();
-        });
-    }
+        // Eseménykezelők hozzáadása
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadRouteData();
+            
+            const complexRouteSelect = document.getElementById('complex-route');
+            if (complexRouteSelect) {
+                complexRouteSelect.addEventListener('change', (event) => {
+                    const selectedRoute = event.target.value;
+                    if (selectedRoute) {
+                        displayLocalRoute(selectedRoute);
+                    }
+                });
+            }
 
-    const transitModeButtons = document.querySelectorAll('.transit-mode-btn');
-    transitModeButtons.forEach(button => {
-        button.addEventListener('click', () => {
-            clearCurrentRoute();
+            const findRouteButton = document.getElementById('find-route');
+            if (findRouteButton) {
+                findRouteButton.addEventListener('click', () => {
+                    clearCurrentRoute();
+                });
+            }
+
+            const transitModeButtons = document.querySelectorAll('.transit-mode-btn');
+            transitModeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    clearCurrentRoute();
+                });
+            });
         });
-    });
-});
 </script>
 
 <script>
