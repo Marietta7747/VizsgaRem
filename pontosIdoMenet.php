@@ -109,11 +109,12 @@ try {
         }
 
         .timeCon{
-            background: #fcfcfc;
-            width: 97.5%;
-            height: 60%;
+            background: #fbfbfb;
+            width: 90%;
             margin-bottom: 5px;
             padding: 20px;
+            margin: 0 auto;
+            border-radius: 10px;
         }
 
         .time-number {
@@ -157,7 +158,7 @@ try {
             float: right;
             font-size: 1.5rem;
             font-weight: bold;
-            margin-right: 18%;
+            margin-right: 16%;
             margin-top: 1%;
         }
 
